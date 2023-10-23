@@ -4,13 +4,24 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use SoftDeletes, HasApiTokens, HasFactory, Notifiable;
+
+    const ROLE_ADMIN = 'admin';
+    const ROLE_STUDENT = 'student';
+    const ROLE_TEACHER = 'teacher';
+
+    const ROLES = [
+        self::ROLE_ADMIN => self::ROLE_ADMIN,
+        self::ROLE_STUDENT => self::ROLE_STUDENT,
+        self::ROLE_TEACHER => self::ROLE_TEACHER,
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +32,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
