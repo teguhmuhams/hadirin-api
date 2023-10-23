@@ -30,6 +30,7 @@ class UserController extends Controller
         $validated = $request->validated();
 
         $user = User::create($validated);
+        $user->createToken('user-token')->plainTextToken;
 
         return new UserResource($user);
     }
