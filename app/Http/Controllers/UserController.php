@@ -20,11 +20,11 @@ class UserController extends Controller
     public function index()
     {
         return QueryBuilder::for(User::class)
-            ->allowedIncludes(['teacher', 'student'])
+            ->allowedIncludes(['teacher', 'student', 'admin'])
             ->allowedSorts('id')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
-                'email'
+                'email',
             ])
             ->defaultSort('id')
             ->paginate();
