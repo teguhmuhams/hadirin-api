@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->string('name')->required();
-            $table->string('employee_number',10)->required();
-            $table->unsignedBigInteger('user_id');
+            $table->string('employee_number', 10)->required();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('level')->required();
             $table->softDeletes();

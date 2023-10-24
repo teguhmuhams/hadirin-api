@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TeacherSaveRequest;
 use App\Http\Resources\TeacherResource;
+use App\Models\User;
 use App\Models\Teacher;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -34,15 +37,32 @@ class TeacherController extends Controller
      * Store a newly created resource in database.
      *
      * @param  \App\Http\Requests\TeacherSaveRequest  $request
-     * @return \App\Http\Resources\TeacherResource
+     * @param  \App\Models\Teacher $teacher
+     * @return JsonResponse
      */
-    public function store(TeacherSaveRequest $request)
+    public function store(TeacherSaveRequest $request, Teacher $teacher): JsonResponse
     {
-        $validated = $request->validated();
+        $teacher->fill($request->only($teacher->offsetGet('fillable')));
 
-        $teacher = Teacher::create($validated);
+        if ($request->has('email') && $request->has('password') && $request->has('role')) {
+            $user = User::create(
+                [
+                    'identifier' => $request->nip,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'role'  => User::ROLE_TEACHER,
+                    'email_verified_at' => Carbon::now(),
+                ]
+            );
+            $teacher->user_id = $user->id;
+        }
 
-        return new TeacherResource($teacher);
+        $teacher->save();
+
+        $resource = (new TeacherResource($teacher))
+            ->additional(['info' => 'The new teacher has been saved.']);
+
+        return $resource->toResponse($request)->setStatusCode(201);
     }
 
 

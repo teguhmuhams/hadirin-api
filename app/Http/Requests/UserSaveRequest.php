@@ -25,7 +25,7 @@ class UserSaveRequest extends FormRequest
     {
         return [
             'name'      => 'required|string|min:3|max:255',
-            'email'     => 'required|string|email|min:3|max:255',
+            'email'     => 'required|string|unique:users,email|email|min:3|max:255',
             'password'  => 'required|string|min:8|max:255',
             'role'      => $this->getRoleRules(),
         ];
