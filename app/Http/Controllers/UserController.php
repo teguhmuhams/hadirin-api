@@ -6,25 +6,36 @@ use App\Http\Requests\UserSaveRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
 class UserController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         return QueryBuilder::for(User::class)
-            ->allowedIncludes([''])
-            ->allowedSorts('id', 'title')
+            ->allowedIncludes(['teacher', 'student'])
+            ->allowedSorts('id')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
-                'name',
                 'email'
             ])
             ->defaultSort('id')
             ->paginate();
     }
 
+    /**
+     * Store a newly created resource in database.
+     *
+     * @param  \App\Http\Requests\UserSaveRequest  $request
+     * @return \App\Http\Resources\UserResource
+     */
     public function store(UserSaveRequest $request)
     {
         $validated = $request->validated();
@@ -36,6 +47,12 @@ class UserController extends Controller
     }
 
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
     public function show(User $user)
     {
         return QueryBuilder::for(User::class)
@@ -43,23 +60,46 @@ class UserController extends Controller
             ->findOrFail($user->id);
     }
 
-    public function update(UserSaveRequest $request, int $id): JsonResponse
+    /**
+     * Update the specified resource.
+     *
+     * @param  \App\Http\Requests\UserSaveRequest  $request
+     * @param \App\Model\User $user
+     * @return \App\Http\Resources\UserResource
+     */
+    public function update(UserSaveRequest $request, User $user): JsonResponse
     {
-        $data = User::findOrFail($id);
+        // Get all fillable fields from the model, but exclude 'role' for update
+        $fillable = $user->getFillable();
+        $index = array_search('role', $fillable);
+        if ($index !== false) {
+            unset($fillable[$index]);
+        }
 
-        $data->update($request->validated());
+        $user->fill($request->only($fillable));
+
+        if ($user->isDirty()) {
+            if ($user->isDirty('password')) {
+                $user->password = Hash::make($user->password);
+            }
+            $user->save();
+        }
 
         return response()->json([
             'message' => 'User updated successfully!',
-            'data' => $data
+            'data' => $user,
         ], 200);
     }
 
-    public function destroy(int $id)
+    /**
+     * Delete the specified resource.
+     *
+     * @param \App\Model\User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(User $user): JsonResponse
     {
-        $data = User::findOrFail($id);
-
-        $data->delete();
+        $user->delete();
 
         return response()->json([
             'message' => 'User deleted successfully!'

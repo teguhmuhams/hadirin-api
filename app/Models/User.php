@@ -54,4 +54,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Define relationship.
+     */
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
+    }
 }

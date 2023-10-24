@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -15,6 +16,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
 
+        // Create administrator
         User::factory()->create([
             'identifier' =>  sprintf('%06d', 1),
             'email' => 'admin@admin.com',
@@ -24,7 +26,18 @@ class UserSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        User::factory(5)->student()->create();
-        User::factory(5)->teacher()->create();
+        User::factory(5)
+            ->teacher()
+            ->create()
+            ->each(function ($user) {
+                Teacher::factory()->create(
+                    [
+                        'user_id' => $user->id,
+                        'nip' => $user->identifier
+                    ]
+                );
+            });
+
+        // User::factory(5)->student()->create();
     }
 }
