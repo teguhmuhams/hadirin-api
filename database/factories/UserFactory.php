@@ -18,8 +18,11 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $number = fake()->unique()->numberBetween($min = 1, $max = 999999);
+        $identifier = sprintf('%06d', $number);
+
         return [
-            'name' => fake()->name(),
+            'identifier' => $identifier,
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'role'  => User::ROLE_STUDENT,

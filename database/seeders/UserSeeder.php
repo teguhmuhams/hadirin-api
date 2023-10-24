@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     {
 
         User::factory()->create([
-            'name' => 'Administrator',
+            'identifier' =>  sprintf('%06d', 1),
             'email' => 'admin@admin.com',
             'email_verified_at' => now(),
             'role'  => User::ROLE_ADMIN,
