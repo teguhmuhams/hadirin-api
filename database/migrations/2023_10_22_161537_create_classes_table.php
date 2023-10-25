@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('year')->required();
             $table->timestamp('schedule')->required();
             $table->string('status')->required();
-            $table->unsignedBigInteger('teacher_id');
+            $table->unsignedBigInteger('teacher_id')->nullable();
             $table->foreign('teacher_id')->references('id')->on('teachers');
             $table->softDeletes();
             $table->timestamps();

@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name')->required();
             $table->string('nisn')->unique()->required();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamp('birthdate')->required();
-            $table->string('gender',10)->required();
+            $table->string('gender', 10)->required();
             $table->softDeletes();
             $table->timestamps();
         });

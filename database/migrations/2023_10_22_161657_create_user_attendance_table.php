@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('status')->required();
             $table->timestamp('recorded_at')->required();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->string('longitude')->required();
-            $table->string('latitude')->required();
+            $table->string('longitude')->nullable();
+            $table->string('latitude')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
