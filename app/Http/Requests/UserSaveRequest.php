@@ -23,18 +23,20 @@ class UserSaveRequest extends FormRequest
      */
     public function rules(): array
     {
+        $prefix = $this->isMethod('put') ? 'sometimes' : 'required';
+
         return [
-            'name'      => 'required|string|min:3|max:255',
-            'email'     => 'required|string|unique:users,email|email|min:3|max:255',
-            'password'  => 'required|string|min:8|max:255',
-            'role'      => $this->getRoleRules(),
+            'identifier' => $prefix . '|string|unique:users,identifier|min:3|max:255',
+            'email'     => $prefix . '|string|unique:users,email|email|min:3|max:255',
+            'password'  => $prefix . '|string|min:8|max:255',
+            'role'      => $this->getRoleRules($prefix),
         ];
     }
 
-    private function getRoleRules(): array
+    private function getRoleRules($prefix): array
     {
         return [
-            'required',
+            $prefix,
             'string',
             Rule::in(array_values(User::ROLES))
         ];

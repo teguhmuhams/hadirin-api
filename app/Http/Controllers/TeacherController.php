@@ -75,7 +75,7 @@ class TeacherController extends Controller
     public function show(Teacher $teacher)
     {
         return QueryBuilder::for(Teacher::class)
-            ->allowedIncludes(['users'])
+            ->allowedIncludes(['user'])
             ->findOrFail($teacher->id);
     }
 

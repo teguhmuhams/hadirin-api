@@ -6,7 +6,6 @@ use App\Http\Requests\UserSaveRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Hash;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -69,25 +68,31 @@ class UserController extends Controller
      */
     public function update(UserSaveRequest $request, User $user): JsonResponse
     {
-        // Get all fillable fields from the model, but exclude 'role' for update
-        $fillable = $user->getFillable();
-        $index = array_search('role', $fillable);
-        if ($index !== false) {
-            unset($fillable[$index]);
-        }
+        if ($user) {
+            $user->fill($request->only($user->getFillable()));
 
-        $user->fill($request->only($fillable));
+            if ($user->isDirty()) {
+                if ($user->isDirty('identifier')) {
+                    switch ($user->role) {
+                        case User::ROLE_ADMIN:
+                            $user->admin->update(['employee_number' => $user->identifier]);
+                            break;
 
-        if ($user->isDirty()) {
-            if ($user->isDirty('password')) {
-                $user->password = Hash::make($user->password);
+                        case User::ROLE_TEACHER:
+                            $user->teacher->update(['nip' => $user->identifier]);
+                            break;
+
+                        case User::ROLE_STUDENT:
+                            $user->student->update(['nisn' => $user->identifier]);
+                            break;
+                    }
+                }
+                $user->save();
             }
-            $user->save();
         }
-
         return response()->json([
             'message' => 'User updated successfully!',
-            'data' => $user,
+            'data' => new UserResource($user),
         ], 200);
     }
 
