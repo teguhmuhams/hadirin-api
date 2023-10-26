@@ -19,11 +19,15 @@ class CourseController extends Controller
     public function index()
     {
         return QueryBuilder::for(Course::class)
-            ->allowedIncludes(['user'])
-            ->allowedSorts('id')
+            ->allowedIncludes(['grade', 'teacher', 'students', 'attendances'])
+            ->allowedSorts(['id', 'created_at'])
             ->allowedFilters([
                 AllowedFilter::exact('id'),
-                AllowedFilter::exact('nip'),
+                AllowedFilter::exact('name'),
+                AllowedFilter::exact('year'),
+                AllowedFilter::exact('status'),
+                AllowedFilter::exact('grade_id'),
+                AllowedFilter::exact('teacher_id'),
             ])
             ->defaultSort('id')
             ->paginate();

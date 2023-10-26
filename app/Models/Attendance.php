@@ -20,29 +20,22 @@ class Attendance extends Model
         'course_id',
     ];
 
+
     /**
      * Define relationship.
      */
     public function course()
     {
-        return $this->belongsTo(Course::class,);
+        return $this->belongsTo(Course::class);
     }
 
     /**
      * Define relationship.
      */
-    public function courses()
+    public function students()
     {
-        return $this->belongsToMany(Course::class, 'student_course');
-    }
-
-    /**
-     * Define relationship.
-     */
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'user_attendance')
-            ->withPivot('longitude', 'latitude')
+        return $this->belongsToMany(User::class, 'student_attendance')
+            ->withPivot('status', 'longitude', 'latitude')
             ->withTimestamps();;
     }
 }

@@ -45,7 +45,7 @@ class Course extends Model
      */
     public function students()
     {
-        return $this->belongsToMany(User::class, 'student_course');
+        return $this->belongsToMany(User::class, 'student_course')->withTimestamps();
     }
 
     /**
@@ -53,6 +53,8 @@ class Course extends Model
      */
     public function attendances()
     {
-        return $this->hasMany(Attendance::class);
+        return $this->hasMany(Attendance::class)
+            ->withPivot('longitude', 'latitude')
+            ->withTimestamps();
     }
 }
