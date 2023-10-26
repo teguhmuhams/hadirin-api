@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Student extends Model
 {
-    use HasFactory, SoftDeletes;
-
+    use SoftDeletes, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -19,16 +18,16 @@ class Student extends Model
     protected $fillable = [
         'name',
         'nisn',
-        'user_id',
         'birthdate',
         'gender',
+        'user_id',
     ];
 
     /**
      * Define relationship.
      */
-    public function courses()
+    public function user()
     {
-        return $this->belongsToMany(Course::class, 'student_course');
+        return $this->belongsTo(User::class);
     }
 }
