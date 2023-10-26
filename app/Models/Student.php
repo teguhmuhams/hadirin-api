@@ -30,4 +30,24 @@ class Student extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+
+    /**
+     * Define relationship.
+     */
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'student_course')->withTimestamps();;
+    }
+
+
+    /**
+     * Define relationship.
+     */
+    public function attendances()
+    {
+        return $this->belongsToMany(Attendance::class, 'student_attendance')
+            ->withPivot('status', 'longitude', 'latitude')
+            ->withTimestamps();;
+    }
 }

@@ -71,4 +71,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Admin::class);
     }
+
+    /**
+     * Define relationship.
+     */
+    public function attendances()
+    {
+        return $this->belongsToMany(Attendance::class, 'user_attendance')
+            ->withPivot('longitude', 'latitude')
+            ->withTimestamps();
+    }
 }
