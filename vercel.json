@@ -2,12 +2,12 @@
     "version": 2,
     "framework": null,
     "functions": {
-        "apik/index.php": { "runtime": "vercel-php@0.6.0" }
+        "api/index.php": { "runtime": "vercel-php@0.6.0" }
     },
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "/apik/index.php"
+            "dest": "/api/index.php"
         }
     ],
     "env": {
