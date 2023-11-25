@@ -21,7 +21,10 @@ class Student extends Model
         'birthdate',
         'gender',
         'user_id',
+        'grade_id',
     ];
+
+    protected $with = ['grade'];
 
     /**
      * Define relationship.
@@ -49,5 +52,13 @@ class Student extends Model
         return $this->belongsToMany(Attendance::class, 'student_attendance')
             ->withPivot('status', 'longitude', 'latitude')
             ->withTimestamps();;
+    }
+
+    /**
+     * Define relationship.
+     */
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class);
     }
 }

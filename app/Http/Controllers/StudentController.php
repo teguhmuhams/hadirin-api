@@ -22,7 +22,7 @@ class StudentController extends Controller
     public function index()
     {
         return QueryBuilder::for(Student::class)
-            ->allowedIncludes(['user'])
+            ->allowedIncludes(['user', 'grade'])
             ->allowedSorts('id')
             ->allowedFilters([
                 AllowedFilter::exact('id'),
@@ -94,7 +94,7 @@ class StudentController extends Controller
                 $user->identifier = $student->nisn;
                 $user->save();
             }
-            if($request->has('email')){
+            if ($request->has('email')) {
                 $user->email = $request->email;
                 $user->save();
             }
@@ -126,5 +126,4 @@ class StudentController extends Controller
             'message' => 'Student deleted successfully!'
         ], 200);
     }
-
 }

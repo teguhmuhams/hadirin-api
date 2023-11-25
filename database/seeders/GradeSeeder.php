@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class GradeSeeder extends Seeder
@@ -15,13 +15,12 @@ class GradeSeeder extends Seeder
     public function run(): void
     {
         DB::table('grades')->insert(array(
-        array('name' => '10IPA1'),
-        array('name' => '10IPA2'),
-        array('name' => '10IPA3'),
-        array('name' => '11IPA1'),
-        array('name' => '11IPA2'),
-        array('name' => '11IPA3'),
-
+            array('name' => '10 IPA 1'),
+            array('name' => '10 IPA 2'),
+            array('name' => '10 IPA 3'),
+            array('name' => '11 IPA 1'),
+            array('name' => '11 IPA 2'),
+            array('name' => '11 IPA 3'),
         ));
     }
 }

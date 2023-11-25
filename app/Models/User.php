@@ -56,6 +56,8 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    protected $with = ['student', 'teacher', 'admin'];
+
     /**
      * Define relationship.
      */

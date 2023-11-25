@@ -28,7 +28,7 @@ class TeacherSaveRequest extends FormRequest
             'password'  => 'required|string|min:8|max:255',
             'role'      => 'required|in:' . User::ROLE_TEACHER,
             'nip'       => 'required|string|unique:teachers,nip|min:3|max:255',
-            'birthdate' => 'required|date',
+            'birthdate' => 'nullable|date',
             'gender'    => 'required|string|in:Laki-Laki,Perempuan',
         ];
     }

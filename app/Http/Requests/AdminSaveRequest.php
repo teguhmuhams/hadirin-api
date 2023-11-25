@@ -23,12 +23,12 @@ class AdminSaveRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'      => 'required|string|min:3|max:255',
-            'email'     => 'required|string|unique:users,email|email|min:3|max:255',
-            'password'  => 'required|string|min:8|max:255',
-            'role'      => 'required|in:' . User::ROLE_ADMIN,
-            'employee_number'     => 'required|string|unique:admins,employee_number|min:3|max:255',
-            'level'    => 'required|string|in:super-admin',
+            'name'              => 'required|string|min:3|max:255',
+            'email'             => 'required|string|unique:users,email|email|min:3|max:255',
+            'password'          => 'required|string|min:8|max:255',
+            'role'              => 'required|in:' . User::ROLE_ADMIN,
+            'employee_number'   => 'required|string|unique:admins,employee_number|min:3|max:255',
+            'level'             => 'required|string|in:super-admin',
         ];
     }
 }

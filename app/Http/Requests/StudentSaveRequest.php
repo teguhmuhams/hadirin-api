@@ -27,9 +27,10 @@ class StudentSaveRequest extends FormRequest
             'email'     => 'required|string|unique:users,email|email|min:3|max:255',
             'password'  => 'required|string|min:8|max:255',
             'role'      => 'required|in:' . User::ROLE_STUDENT,
-            'nisn'       => 'required|string|unique:teachers,nip|min:3|max:255',
-            'birthdate' => 'required|date',
+            'nisn'      => 'required|string|unique:teachers,nip|min:3|max:255',
+            'birthdate' => 'nullable|date',
             'gender'    => 'required|string|in:Laki-Laki,Perempuan',
+            'grade_id'  => 'nullable|exists:grades,id'
         ];
     }
 }
