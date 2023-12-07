@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-
-use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -17,8 +17,6 @@ class AuthController extends Controller
     {
         // Validate user data
         $validated = $request->validated();
-
-        Log::info($validated);
 
         // Check email
         $user = User::where('email', $validated['email'])->first();
@@ -33,24 +31,30 @@ class AuthController extends Controller
 
         // Create token
         $token = $user->createToken('user-token')->plainTextToken;
-        $token = 'Bearer ' . $token;
+
+        // Set cookie
+        $cookie = cookie('jwt', $token, 60 * 24); // 1 day
 
         // Send response
         return response()->json([
-            'user' => $user,
-            'token' => $token,
-        ]);
+            'message' => 'Login succeeded.'
+        ])->withCookie($cookie);
+    }
+
+    // Get user data
+    public function user()
+    {
+        return Auth::user();
     }
 
     // Logout user
-    public function logout(Request $request)
+    public function logout()
     {
-        // Revoke the user's current token...
-        $request->user()->currentAccessToken()->delete();
+        $cookie =  Cookie::forget('jwt');
 
         // Send response
         return response()->json([
             'message' => 'Logged out'
-        ]);
+        ])->withCookie($cookie);
     }
 }

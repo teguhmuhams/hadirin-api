@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -14,13 +15,12 @@ class GradeSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('grades')->insert(array(
-            array('name' => '10 IPA 1'),
-            array('name' => '10 IPA 2'),
-            array('name' => '10 IPA 3'),
-            array('name' => '11 IPA 1'),
-            array('name' => '11 IPA 2'),
-            array('name' => '11 IPA 3'),
-        ));
+        foreach (range(10, 12) as $grade) {
+            foreach (range(1, 3) as $class) {
+                $data[] = ['name' => "{$grade} IPA {$class}", 'created_at' => Carbon::now()];
+            }
+        }
+
+        DB::table('grades')->insert($data);
     }
 }

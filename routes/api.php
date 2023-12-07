@@ -25,23 +25,23 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [AuthController::class, 'user']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    // Protected with sanctum authentication
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('teachers', TeacherController::class);
+    Route::apiResource('courses', CourseController::class);
+    Route::apiResource('attendances', AttendanceController::class);
+    Route::apiResource('students', StudentController::class);
+    Route::apiResource('admins', AdminController::class);
+    Route::apiResource('grades', GradeController::class);
+
+    Route::post('/students/{student}/courses/{course}', [StudentCourseController::class, 'enrollStudentToCourse']);
+    Route::post('/students/{student}/attendances/{attendance}', [StudentAttendanceController::class, 'enrollStudentToAttendance']);
+
+    Route::post('/migrate', [MigrationController::class, 'migrate']);
 });
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-
-// Protected with sanctum authentication
-Route::post('/logout', [AuthController::class, 'logout']);
-Route::apiResource('users', UserController::class);
-Route::apiResource('teachers', TeacherController::class);
-Route::apiResource('courses', CourseController::class);
-Route::apiResource('attendances', AttendanceController::class);
-Route::apiResource('students', StudentController::class);
-Route::apiResource('admins', AdminController::class);
-Route::apiResource('grades', GradeController::class);
-
-Route::post('/students/{student}/courses/{course}', [StudentCourseController::class, 'enrollStudentToCourse']);
-Route::post('/students/{student}/attendances/{attendance}', [StudentAttendanceController::class, 'enrollStudentToAttendance']);
-
-Route::post('/migrate', [MigrationController::class, 'migrate']);
